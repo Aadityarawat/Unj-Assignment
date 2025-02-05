@@ -10,38 +10,62 @@ class UserListController extends StateNotifier<List<UserDataList>> {
   }
 
   final Dio _dio = Dio();
-  int _page = 1;
+  int _page = 2;
   bool _hasMore = true;
+  bool _isLoading = false;
 
   Future<void> fetchUsers() async {
-    if (!_hasMore) return;
+    if (!_hasMore || _isLoading) return;
 
+    _isLoading = true;
     try {
       final response = await _dio.get(
-        'https://c43d9c37-22a2-4d9b-9f13-923d980cd6ec.mock.pstmn.io/users?page=$_page',
+        'https://c43d9c37-22a2-4d9b-9f13-923d980cd6ec.mock.pstmn.io/users',
+        queryParameters: {'page': _page},
       );
 
-      final data = response.data['users'] as List;
-      final users = data.map((json) => UserDataList.fromJson(json)).toList();
+      if (response.statusCode == 200) {
+        final data = response.data['users'] as List?;
+        if (data == null) {
+          print("Error: API response does not contain 'users' key.");
+          return;
+        }
 
-      if (users.isEmpty) {
-        _hasMore = false;
+        final users = data.map((json) => UserDataList.fromJson(json)).toList();
+
+        if (users.isEmpty) {
+          _hasMore = false;
+        } else {
+          _page++;
+          state = [...state, ...users];
+          _saveUsersToLocal();
+        }
       } else {
-        _page++;
-        state = [...users, ...state];
+        print("Error: Received status code ${response.statusCode}");
+      }
+    } on DioException catch (dioError) {
+      print("DioError: ${dioError.message}");
+      if (dioError.response != null) {
+        print("Response data: ${dioError.response?.data}");
       }
     } catch (e) {
-      print("Error fetching users: $e");
+      print("Unexpected error: $e");
+    } finally {
+      _isLoading = false;
     }
   }
 
   Future<void> loadUsersFromLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedUsers = prefs.getString('users');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final storedUsers = prefs.getString('users');
 
-    if (storedUsers != null) {
-      final List<dynamic> userList = json.decode(storedUsers);
-      state = userList.map((json) => UserDataList.fromJson(json)).toList();
+      if (storedUsers != null) {
+        final List<dynamic> userList = json.decode(storedUsers);
+        state = userList.map((json) => UserDataList.fromJson(json)).toList();
+      }
+    } catch (e) {
+      print("Error loading users from local storage: $e");
     }
   }
 
@@ -51,8 +75,12 @@ class UserListController extends StateNotifier<List<UserDataList>> {
   }
 
   Future<void> _saveUsersToLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userListJson = state.map((user) => user.toJson()).toList();
-    await prefs.setString('users', jsonEncode(userListJson));
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userListJson = state.map((user) => user.toJson()).toList();
+      await prefs.setString('users', jsonEncode(userListJson));
+    } catch (e) {
+      print("Error saving users to local storage: $e");
+    }
   }
 }
