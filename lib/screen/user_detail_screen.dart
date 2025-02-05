@@ -13,7 +13,6 @@ final userProvider = FutureProvider<User>((ref) async {
 class UserDetailsScreen extends ConsumerWidget {
   const UserDetailsScreen({super.key});
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userProvider);
@@ -27,28 +26,48 @@ class UserDetailsScreen extends ConsumerWidget {
             child: Column(
               children: [
                 Container(
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Name: ${user.name}", style: TextStyle(fontSize: 18)),
-                        Text("Email: ${user.email}", style: TextStyle(fontSize: 18)),
-                        Text("Phone: ${user.phone}", style: TextStyle(fontSize: 18)),
-                        Text("Address: ${user.address}", style: TextStyle(fontSize: 18)),
-                        if (user.company != null)
-                          Text("Company: ${user.company}", style: TextStyle(fontSize: 18)),
-                        if (user.website != null)
-                          Text("Website: ${user.website}", style: TextStyle(fontSize: 18)),
-                        if (user.latitude != null && user.longitude != null)
-                          Text("Location: ${user.latitude}, ${user.longitude}",
-                              style: TextStyle(fontSize: 18)),
-                      ],
-                    ),
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Name: ${user.name}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        "Email: ${user.email}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        "Phone: ${user.phone}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text(
+                        "Address: ${user.address}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      if (user.company != null)
+                        Text(
+                          "Company: ${user.company}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      if (user.website != null)
+                        Text(
+                          "Website: ${user.website}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      if (user.latitude != null && user.longitude != null)
+                        Text(
+                          "Location: ${user.latitude}, ${user.longitude}",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () async {
