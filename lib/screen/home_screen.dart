@@ -18,12 +18,14 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
+
   final TextEditingController searchController = TextEditingController();
   List<UserDataList> filteredUsers = [];
 
   @override
   void initState() {
     super.initState();
+    Future.microtask(() => ref.read(userListProvider.notifier).fetchUsers());
     searchController.addListener(_filterUsers);
   }
 
