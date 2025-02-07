@@ -1,17 +1,16 @@
 import 'package:unj_digital_assignment/models/userDataList.dart';
 
-class HomePageData{
-  UserDataList? data;
 
-  HomePageData({
-    required this.data,
-  });
+class HomePageData {
+  final List<UserDataList> users;
 
-  HomePageData.initial() : data = null;
+  HomePageData({required this.users});
 
-  HomePageData copyWith({UserDataList? data}){
+  HomePageData.initial() : users = [];
+
+  HomePageData copyWith({List<UserDataList>? users}) {
     return HomePageData(
-        data: data ?? this.data,
+      users: users ?? this.users,
     );
   }
 }

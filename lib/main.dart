@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:unj_digital_assignment/screen/home_screen.dart';
+import 'package:unj_digital_assignment/service/database_service.dart';
+import 'package:unj_digital_assignment/service/http_service.dart';
 
 void main() async{
+  await _setupService();
   runApp(const MyApp());
+}
+
+Future<void> _setupService() async{
+  GetIt.instance.registerSingleton(HttpService());
+  GetIt.instance.registerSingleton(DatabaseService());
 }
 
 

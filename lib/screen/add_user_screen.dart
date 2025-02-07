@@ -47,7 +47,7 @@ class AddUserScreen extends ConsumerWidget {
                   address: addressController.text,
                 );
 
-                ref.read(userListProvider.notifier).addUser(newUser);
+                ref.read(homePageControllerProvider.notifier).addUser(newUser);
 
                 Navigator.pop(context);
               },
