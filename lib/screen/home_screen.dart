@@ -66,50 +66,53 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Users")),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: const InputDecoration(
-                labelText: "Search Users",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+      body: SizedBox(
+        width: MediaQuery.sizeOf(context).width,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  labelText: "Search Users",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              controller: _allUserListScrollController,
-              itemCount: searchController.text.isEmpty
-                  ? homePageData.users.length
-                  : filteredUsers.length,
-              itemBuilder: (context, index) {
-                final user = searchController.text.isEmpty
-                    ? homePageData.users[index]
-                    : filteredUsers[index];
-                return ListTile(
-                  title: Text(user.name),
-                  subtitle: Text(user.email),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UserDetailsScreen(userId: user),
-                      ),
-                    );
-                  },
-                );
-              },
+            Expanded(
+              child: ListView.builder(
+                controller: _allUserListScrollController,
+                itemCount: searchController.text.isEmpty
+                    ? homePageData.users.length
+                    : filteredUsers.length,
+                itemBuilder: (context, index) {
+                  final user = searchController.text.isEmpty
+                      ? homePageData.users[index]
+                      : filteredUsers[index];
+                  return ListTile(
+                    title: Text(user.name),
+                    subtitle: Text(user.email),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserDetailsScreen(userId: user),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          /*if (homePageData.isLoading) // Show loading indicator when fetching more data
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),*/
-        ],
+            /*if (homePageData.isLoading) // Show loading indicator when fetching more data
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),*/
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
