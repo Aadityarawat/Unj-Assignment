@@ -30,14 +30,17 @@ class HomePageController extends StateNotifier<HomePageData> {
   bool _isLoading = false;
 
   Future<void> load() async {
-    if (!_hasMore || _isLoading) return;
+    if (!_hasMore || state.isLoading) return;
 
-    _isLoading = true;
+    state = state.copyWith(isLoading: true); // ✅ Set loading to true
+
     print("🔄 Fetching users from API...");
 
     try {
       print("✅ Loading page $_page");
-      final res = await _httpService.get("https://c43d9c37-22a2-4d9b-9f13-923d980cd6ec.mock.pstmn.io/users?page=$_page");
+      final res = await _httpService.get(
+        "https://c43d9c37-22a2-4d9b-9f13-923d980cd6ec.mock.pstmn.io/users?page=$_page",
+      );
 
       if (res?.statusCode == 200) {
         final Map<String, dynamic>? responseData = res?.data;
@@ -56,7 +59,7 @@ class HomePageController extends StateNotifier<HomePageData> {
           _hasMore = false;
           print("⚠️ No more users to load.");
         } else {
-          if(_totalUsers > state.users.length){
+          if (_totalUsers > state.users.length) {
             final newUsers = data.map((json) => UserDataList.fromJson(json)).toList();
 
             state = state.copyWith(users: [...state.users, ...newUsers]); // ✅ Null-safe list merging
@@ -79,7 +82,7 @@ class HomePageController extends StateNotifier<HomePageData> {
     } catch (e) {
       print("❌ Exception during fetch: $e");
     } finally {
-      _isLoading = false; // ✅ Ensures reset even if an error occurs
+      state = state.copyWith(isLoading: false); // ✅ Ensure reset even if an error occurs
     }
   }
 

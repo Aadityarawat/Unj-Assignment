@@ -27,14 +27,14 @@ class DatabaseService{
       if (storedUsers != null) {
         final List<dynamic> userList = json.decode(storedUsers);
         final users = userList.map((json) => UserDataList.fromJson(json)).toList();
-        return HomePageData(users: users);
+        return HomePageData(users: users, isLoading: false);
       }
     } catch (e) {
       print("Error loading users from local storage: $e");
     }
 
     // Return an empty HomePageData if loading fails
-    return HomePageData(users: []);
+    return HomePageData(users: [], isLoading: false);
   }
 
 }
