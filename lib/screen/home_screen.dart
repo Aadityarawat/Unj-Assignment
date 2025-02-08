@@ -140,10 +140,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
 
-            // Show loading indicator at the bottom when more data is being fetched
             if (homePageData.isLoading)
               const Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(8),
                 child: CircularProgressIndicator(),
               ),
           ],
