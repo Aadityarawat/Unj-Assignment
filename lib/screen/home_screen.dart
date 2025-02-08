@@ -99,7 +99,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
             Expanded(
               child: Skeletonizer(
-                enabled: homePageData.isLoading, // Show skeleton when loading
+                enabled: homePageData.isLoading,
                 child: ListView.builder(
                   controller: _allUserListScrollController,
                   itemCount: searchController.text.isEmpty
@@ -149,7 +149,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
 
-      // Floating Action Button with animation
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
