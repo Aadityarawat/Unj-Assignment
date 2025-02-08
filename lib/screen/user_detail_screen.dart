@@ -4,6 +4,7 @@ import '../controller/userDetailScreenController.dart';
 import '../models/UserDataDetail.dart';
 import '../models/userDataList.dart';
 import 'edit_user_screen.dart';
+import 'home_screen.dart';
 
 class UserDetailsScreen extends ConsumerWidget {
   final UserDataList userId;
@@ -75,7 +76,7 @@ class UserDetailsCard extends StatelessWidget {
                     ),
                   );
                   if (updatedUser != null) {
-                    ref.invalidate(userProvider(userId.id));
+                    ref.read(homePageControllerProvider.notifier).addUser(updatedUser);
                   }
                 },
                 style: ElevatedButton.styleFrom(
