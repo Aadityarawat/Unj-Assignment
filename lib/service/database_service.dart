@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unj_digital_assignment/models/userDataList.dart';
 
@@ -33,7 +32,6 @@ class DatabaseService{
       print("Error loading users from local storage: $e");
     }
 
-    // Return an empty HomePageData if loading fails
     return HomePageData(users: [], isLoading: false);
   }
 

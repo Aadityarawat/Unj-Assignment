@@ -74,16 +74,25 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             // Search Bar with elevation and padding
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: searchController,
-                decoration: InputDecoration(
-                  labelText: "Search Users",
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      labelText: "Search Users",
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white54,
+                    ),
                   ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
                 ),
               ),
             ),

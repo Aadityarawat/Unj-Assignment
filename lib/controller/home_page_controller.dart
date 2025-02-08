@@ -24,20 +24,17 @@ class HomePageController extends StateNotifier<HomePageData> {
   }
 
   int _page = 1;
-  int _totalPages = 1; // Initialize total pages to 1
-  int _totalUsers = 1; // Initialize total pages to 1
+  int _totalPages = 1;
+  int _totalUsers = 1;
   bool _hasMore = true;
-  bool _isLoading = false;
 
   Future<void> load() async {
     if (!_hasMore || state.isLoading) return;
 
-    state = state.copyWith(isLoading: true); // ✅ Set loading to true
-
-    print("🔄 Fetching users from API...");
+    state = state.copyWith(isLoading: true);
 
     try {
-      print("✅ Loading page $_page");
+
       final res = await _httpService.get(
         "https://c43d9c37-22a2-4d9b-9f13-923d980cd6ec.mock.pstmn.io/users?page=$_page",
       );
@@ -47,7 +44,6 @@ class HomePageController extends StateNotifier<HomePageData> {
 
         if (responseData == null || responseData['users'] == null) {
           _hasMore = false;
-          print("⚠️ No more users to load.");
           return;
         }
 
@@ -57,32 +53,28 @@ class HomePageController extends StateNotifier<HomePageData> {
 
         if (data == null || data.isEmpty) {
           _hasMore = false;
-          print("⚠️ No more users to load.");
+
         } else {
           if (_totalUsers > state.users.length) {
             final newUsers = data.map((json) => UserDataList.fromJson(json)).toList();
 
-            state = state.copyWith(users: [...state.users, ...newUsers]); // ✅ Null-safe list merging
+            state = state.copyWith(users: [...state.users, ...newUsers]);
             _databaseService.saveUsersToLocal(state.users);
 
-            print("✅ Loaded ${newUsers.length} users. Total: ${state.users.length}");
-
-            // Check if there are more pages to load
             if (_page < _totalPages) {
               _page++;
             } else {
               _hasMore = false;
-              print("✅ Reached the last page. No more pages to load.");
             }
           }
         }
       } else {
-        print("❌ API Error: ${res?.statusCode}");
+        print(" API Error: ${res?.statusCode}");
       }
     } catch (e) {
-      print("❌ Exception during fetch: $e");
+      print(" Exception during fetch: $e");
     } finally {
-      state = state.copyWith(isLoading: false); // ✅ Ensure reset even if an error occurs
+      state = state.copyWith(isLoading: false);
     }
   }
 

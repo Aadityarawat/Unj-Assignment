@@ -14,9 +14,12 @@ class UserDetailsScreen extends ConsumerWidget {
     final userData = ref.watch(userProvider(userId.id));
 
     return Scaffold(
-      appBar: AppBar(title: const Text("User Details")),
+      appBar: AppBar(
+        title: const Text("User Details"),
+        centerTitle: true,
+      ),
       body: userData.when(
-        data: (user) => UserDetailsCard(user: user, ref: ref, userId: userId,),
+        data: (user) => UserDetailsCard(user: user, ref: ref, userId: userId),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text("Error: $err")),
       ),
@@ -24,7 +27,6 @@ class UserDetailsScreen extends ConsumerWidget {
   }
 }
 
-// Extracted UI for better readability
 class UserDetailsCard extends StatelessWidget {
   final UserDataList userId;
   final User user;
@@ -33,58 +35,79 @@ class UserDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
+    return
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildText("Name", user.name),
-                  _buildText("Email", user.email),
-                  _buildText("Phone", user.phone),
-                  _buildText("Address", user.address),
-                  if (user.company != null) _buildText("Company", user.company!),
-                  if (user.website != null) _buildText("Website", user.website!),
-                  if (user.latitude != null && user.longitude != null)
-                    _buildText("Location", "${user.latitude}, ${user.longitude}"),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInfoRow(Icons.perm_identity_rounded, "Name", user.name),
+                    _buildInfoRow(Icons.mail, "Email", user.email),
+                    _buildInfoRow(Icons.phone, "Phone", user.phone),
+                    _buildInfoRow(Icons.add_chart_outlined, "Address", user.address),
+                    if (user.company != null) _buildInfoRow(Icons.factory, "Company", user.company!),
+                    if (user.website != null) _buildInfoRow(Icons.wallet_giftcard, "Website", user.website!),
+                    if (user.latitude != null && user.longitude != null)
+                      _buildInfoRow(Icons.location_pin, "Location", "${user.latitude}, ${user.longitude}"),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                final updatedUser = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditUserScreen(user: user),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final updatedUser = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditUserScreen(user: user),
+                    ),
+                  );
+                  if (updatedUser != null) {
+                    ref.invalidate(userProvider(userId.id));
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                );
-                if (updatedUser != null) {
-                  ref.invalidate(userProvider(userId.id)); // Refresh only this user
-                }
-              },
-              child: const Text("Edit"),
+                ),
+                child: const Text("Edit User", style: TextStyle(fontSize: 16, color: Colors.white)),
+              ),
             ),
           ],
         ),
-      ),
     );
   }
 
-  Widget _buildText(String label, String value) {
+  Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Text(
-        "$label: $value",
-        style: const TextStyle(fontSize: 18),
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, size: 24, color: Colors.blueGrey),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "$label: $value",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
       ),
     );
   }

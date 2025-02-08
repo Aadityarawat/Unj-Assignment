@@ -47,32 +47,29 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Edit User")),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade300),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 5,
-                      spreadRadius: 2,
-                    ),
-                  ],
                 ),
-                child: Column(
-                  children: [
-                    _buildTextField(nameController, "Name", "Please enter a valid name"),
-                    _buildTextField(emailController, "Email", "Enter a valid email", isEmail: true),
-                    _buildTextField(phoneController, "Phone", "Enter a valid phone number (10 digits)", isNumber: true),
-                  ],
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildTextField(nameController, "Name", "Please enter a valid name"),
+                      _buildTextField(emailController, "Email", "Enter a valid email", isEmail: true),
+                      _buildTextField(phoneController, "Phone", "Enter a valid phone number (10 digits)", isNumber: true),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

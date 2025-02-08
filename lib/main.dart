@@ -6,10 +6,12 @@ import 'package:unj_digital_assignment/service/database_service.dart';
 import 'package:unj_digital_assignment/service/http_service.dart';
 
 void main() async{
+  // main() will execute MyApp() after setupService()
   await _setupService();
   runApp(const MyApp());
 }
 
+// Creating Singleton instance of services using DI.
 Future<void> _setupService() async{
   GetIt.instance.registerSingleton(HttpService());
   GetIt.instance.registerSingleton(DatabaseService());
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp(
         title: 'Unj Digital',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
